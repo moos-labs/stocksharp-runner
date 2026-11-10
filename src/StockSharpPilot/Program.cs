@@ -37,8 +37,11 @@ namespace StockSharpPilot
 			Console.WriteLine($"Period: {Paths.HistoryBeginDate:d} - {Paths.HistoryEndDate:d}");
 			Console.WriteLine();
 
+			// NOTE: no ConsoleLogListener — it flushes asynchronously and its
+			// queued per-candle lines can land after the completion summary,
+			// corrupting the headline block. Logs go to backtest.log instead;
+			// the console carries only this program's own output.
 			var logManager = new LogManager();
-			logManager.Listeners.Add(new ConsoleLogListener());
 			logManager.Listeners.Add(new FileLogListener("backtest.log"));
 
 			var exchangeInfoProvider = new InMemoryExchangeInfoProvider();
